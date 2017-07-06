@@ -57,14 +57,41 @@ namespace Xpdf
         public abstract byte[] HtmlToPdf(string html, string fileName);
 
         /// <summary>
-        /// Generate byte[] from file
+        /// Call generator pdf from Url or Html
         /// </summary>
-        /// <param name="page">Url or Html Content</param>        
+        /// <param name="html">html type</param>
+        /// <returns>byte[] from file</returns>
+        public abstract byte[] HtmlToPdf(string html);
+
+        /// <summary>
+        /// Generate byte[] from Url or Html Content
+        /// </summary>
+        /// <param name="page">Url or Html Content</param>
         /// <param name="fileName">Name of file</param>
         /// <param name="source">EnumType:Url or Html</param>
         /// <returns></returns>
         [System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.Assert, Unrestricted = true)]
         protected byte[] CreatePdfFile(string page, string fileName, EnumPdfType source)
+        {
+            var fileBytes = CreatePdfFile(page, source);
+
+            using (FileStream fs = new FileStream(string.Concat(Path, fileName.ToLower().Replace(".pdf", string.Empty), ".PDF"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                fs.Write(fileBytes, 0, fileBytes.Length);
+                fs.Close();
+            }
+
+            return fileBytes;
+        }
+
+        /// <summary>
+        /// Generate byte[] from html string
+        /// </summary>
+        /// <param name="page">Url or Html Content</param>        
+        /// <param name="source">EnumType:Url or Html</param>
+        /// <returns></returns>
+        [System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.Assert, Unrestricted = true)]
+        protected byte[] CreatePdfFile(string page, EnumPdfType source)
         {
             bool? isFailed;
             byte[] fileBytes;
@@ -125,12 +152,6 @@ namespace Xpdf
                             fileBytes = wkHtml.Convert();
                     }
 
-                    using (FileStream fs = new FileStream(string.Concat(Path, fileName.ToLower().Replace(".pdf", string.Empty), ".PDF"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                    {
-                        fs.Write(fileBytes, 0, fileBytes.Length);
-                        fs.Close();
-                    }
-
                     return fileBytes;
                 }
             }
@@ -138,6 +159,7 @@ namespace Xpdf
             {
                 throw ex;
             }
-        }        
+        }
+
     }
 }

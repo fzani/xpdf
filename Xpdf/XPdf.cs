@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.Policy;
-using System.Text;
 using WkHtmlToXSharp;
 
 namespace Xpdf
@@ -58,6 +54,16 @@ namespace Xpdf
         public override byte[] HtmlToPdf(string html, string fileName)
         {
             return base.CreatePdfFile(html, fileName, EnumPdfType.Html);
+        }
+
+        /// <summary>
+        /// Call generator pdf from Url or Html
+        /// </summary>
+        /// <param name="html">html type</param>
+        /// <returns>byte[] from file</returns>
+        public override byte[] HtmlToPdf(string html)
+        {
+            return base.CreatePdfFile(html, EnumPdfType.Html);
         }
 
         #endregion
