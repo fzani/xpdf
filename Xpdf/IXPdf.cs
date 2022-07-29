@@ -23,6 +23,14 @@ namespace Xpdf
         /// <param name="fileName">Name of file</param>
         /// <returns>byte[] from file</returns>
         byte[] HtmlToPdf(string html, string fileName);
-        
+
+        /// <summary>
+        /// Call generator pdf from Url or Html
+        /// </summary>
+        /// <param name="html">html type</param>
+        /// <param name="fileName">Name of file</param>
+        /// <returns>byte[] from file</returns>
+        byte[] HtmlToPdf(string html);
+
     }
 }
